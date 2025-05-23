@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Modal styles */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.3);
+            justify-content: center;
+            align-items: center;
+            animation: fadeInBg 0.4s;
+        }
+        .modal-bg.active {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            padding: 32px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(51, 122, 183, 0.18);
+            text-align: center;
+            min-width: 240px;
+            animation: fadeInModal 0.5s;
+        }
+        .modal button {
+            margin-top: 18px;
+            padding: 8px 24px;
+            background: #337ab7;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.2s;
+        }
+        .modal button:hover {
+            background: #23527c;
+        }
+        @keyframes fadeInModal {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeInBg {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('saved') === '1') {
+                document.getElementById('modal-bg').classList.add('active');
+            }
+        }
+        function closeModal() {
+            document.getElementById('modal-bg').classList.remove('active');
+            // Optionally, remove ?saved=1 from URL
+            if (window.history.replaceState) {
+                const url = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, url);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Expense Tracker</h1>
+    <a href="/all-expenses">
+        <button type="button">View All Expenses</button>
+    </a>
+    <a href="/report">
+        <button type="button">Report</button>
+    </a>
+    <form method="POST" action="/add">
+        <input type="text" name="description" placeholder="Description" required>
+        <input type="number" name="amount" placeholder="Amount" required>
+        <select name="category" required>
+            <option value="" disabled selected>Select Category</option>
+            <option value="Food">Food</option>
+            <option value="Essentials">Essentials</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Education">Education</option>
+            <option value="Travel">Travel</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Investment">Investment</option>
+            <option value="Other">Other</option>
+        </select>
+        <button type="submit">Add</button>
+    </form>
+    <div id="modal-bg" class="modal-bg">
+        <div class="modal">
+            <div>Your data entry is saved!</div>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+</body>
+</html>
+

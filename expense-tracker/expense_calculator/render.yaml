@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: expense-tracker
+    env: python
+    buildCommand: "pip install -r expense_calculator/requirements.txt"
+    startCommand: "gunicorn expense_calculator.app:app"
+    plan: free
